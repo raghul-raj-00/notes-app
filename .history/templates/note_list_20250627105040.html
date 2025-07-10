@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>notelist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type='text/css' media='screen' href='main.css'>
+    <script src="main.js"></script>
+    
+</head>
+<body>
+   <h2>Your notes</h2>
+<a href="{% url 'create_note' %}">+ New</a> |
+<a href="{% url 'logout' %}">Logout</a>
+<ul>
+{% for n in notes %}
+  <li><b>{{ n.title }}</b>
+      <a href="{% url 'edit_note' n.id %}">edit</a>
+      <a href="{% url 'delete_note' n.id %}">del</a><br>
+      {{ n.content }}
+  </li>
+{% empty %}
+  <p>No notes yet.</p>
+{% endfor %}
+</ul>
+
+</body>
+</html>

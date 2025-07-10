@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes App - Register</title>
+</head>
+<body>
+    {% extends 'notes_base.html' %}
+{% block title %}Sign up | Notes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <h3 class="mb-3 text-center">Create Account</h3>
+    <form method="POST" class="card card-body shadow-sm">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input name="username" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password1" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" name="password2" class="form-control" required>
+      </div>
+      <button class="btn btn-success w-100">Register</button>
+      {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+      {% endif %}
+    </form>
+    <p class="mt-2 text-center">
+      Have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+</body>
+</html>

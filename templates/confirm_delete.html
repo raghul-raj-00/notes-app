@@ -1,0 +1,13 @@
+{% extends 'notes_base.html' %}
+{% block title %}Delete Note{% endblock %}
+
+{% block content %}
+<h3 class="mb-2">Delete “{{ note.title }}”?</h3>
+<p class="mb-3">This action cannot be undone.</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-red me-2">Yes, delete</button>
+    <a href="{% url 'note_list' %}" class="btn btn-grey">Cancel</a>
+</form>
+{% endblock %}

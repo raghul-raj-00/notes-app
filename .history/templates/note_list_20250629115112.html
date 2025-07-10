@@ -1,0 +1,48 @@
+
+   {% extends 'base.html' %}
+{% block title %}My Notes{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>notelist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type='text/css' media='screen' href='main.css'>
+    <script src="main.js"></script>
+    
+</head>
+<body>
+  
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Your Notes</h3>
+  <a href="{% url 'create_note' %}" class="btn btn-primary">+ New Note</a>
+</div>
+
+{% if notes %}
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+    {% for n in notes %}
+      <div class="col">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ n.title }}</h5>
+            <p class="card-text">{{ n.content }}</p>
+          </div>
+          <div class="card-footer bg-white">
+            <a href="{% url 'edit_note' n.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+            <a href="{% url 'delete_note' n.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">No notes yet. Click “New Note” to add one.</div>
+{% endif %}
+{% endblock %}
+
+
+</body>
+</html>
