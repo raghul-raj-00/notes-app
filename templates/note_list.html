@@ -9,10 +9,22 @@
         <div class="mb-3">
             <h4 class="mb-1">{{ n.title }}</h4>
             <p class="mb-2">{{ n.content }}</p>
+            {% if n.summary %}
+                <div class="p-2 border rounded bg-light mb-2">
+                    <strong>AI Summary:</strong>
+                    <p class="mb-0">{{ n.summary|linebreaks }}</p>
+                </div>
+            {% endif %}
 
             <a href="{% url 'edit_note' n.id %}"   class="btn btn-grey btn-sm">Edit</a>
             <a href="{% url 'delete_note' n.id %}" class="btn btn-red  btn-sm">Delete</a>
+            <a href="{% url 'summarize_note' n.id %}" class="btn btn-blue btn-sm">
+                Summarize
+            </a>
+
         </div>
+        
+
         <hr>
     {% endfor %}
 {% else %}
