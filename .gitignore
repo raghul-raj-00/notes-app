@@ -26,5 +26,7 @@ Thumbs.db
 # Optional: unwanted apps/folders you mentioned
 asset/
 calc/
+account/
 travelweb/
 firstdjango/settings.py
+.history/

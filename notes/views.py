@@ -7,7 +7,7 @@ from .models import Note
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .serializers import NoteSerializer
-
+from .utils.ai import summarize_text
 # ---------- auth ----------
 def signup(request):
     if request.method == 'POST':
@@ -61,6 +61,14 @@ def delete_note(request, pk):
     if request.method == 'POST':
         note.delete(); return redirect('note_list')
     return render(request, 'confirm_delete.html', {'note': note})
+@login_required
+def summarize_note(request, pk):
+    note = get_object_or_404(Note, id=pk, user=request.user)
+    summary = summarize_text(note.content)
+    note.summary = summary
+    note.save()
+    messages.success(request, "AI Summary is generated!")
+    return redirect('note_list')
 
 
 # ---------- API ----------
