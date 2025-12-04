@@ -1,3 +1,4 @@
+
 import requests
 from django.conf import settings
 
@@ -26,3 +27,7 @@ def summarize_text(text):
         return response_data["choices"][0]["message"]["content"]
     except:
         return "Error: Could not generate summary."
+    
+
+
+
