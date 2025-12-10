@@ -1,19 +1,26 @@
 {% extends 'notes_base.html' %}
-{% block title %}{% if note %}Edit{% else %}Create{% endif %} Note{% endblock %}
+{% block title %}{% if note %}Edit{% else %}Create{% endif %} Note{% endblock %}
 
 {% block content %}
-<h3 class="mb-3 text-center">{% if note %}Edit{% else %}Create{% endif %} Note</h3>
+
+<h2 class="mb-3 text-center">
+    {% if note %}Edit Note{% else %}Create Note{% endif %}
+</h2>
 
 <form method="POST">
     {% csrf_token %}
+
     <div class="mb-2">
-        <label>Title</label><br>
-        <input name="title" value="{{ note.title|default:'' }}" required>
+        <label>Title</label>
+        <input type="text" name="title" value="{{ note.title|default:'' }}" required>
     </div>
+
     <div class="mb-3">
-        <label>Content</label><br>
+        <label>Content</label>
         <textarea name="content" rows="6" required>{{ note.content|default:'' }}</textarea>
     </div>
+
     <button class="btn btn-blue w-100">Save</button>
 </form>
+
 {% endblock %}
