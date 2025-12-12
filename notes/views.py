@@ -67,8 +67,8 @@ def summarize_note(request, pk):
     summary = summarize_text(note.content)
     note.summary = summary
     note.save()
-    messages.success(request, "AI Summary is generated!")
     return redirect('note_list')
+
 
 
 # ---------- API ----------
