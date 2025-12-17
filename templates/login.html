@@ -15,11 +15,14 @@
         <label>Password</label><br>
         <input type="password" name="password" required>
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red" class="mt-2">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
     <button class="btn btn-blue w-100">Login</button>
 
-    {% if error %}
-        <p style="color:red" class="mt-2">{{ error }}</p>
-    {% endif %}
+    
 </form>
 
 <p class="mt-2">
