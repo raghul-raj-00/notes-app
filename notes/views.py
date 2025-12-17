@@ -16,8 +16,9 @@ def signup(request):
             messages.error(request, 'Passwords do not match'); return redirect('signup')
         if User.objects.filter(username=u).exists():
             messages.error(request, 'Username taken'); return redirect('signup')
-        User.objects.create_user(username=u, password=p1)
-        messages.success(request, 'Account created, please log-in'); return redirect('login')
+        else:
+            User.objects.create_user(username=u, password=p1)
+            messages.success(request, 'Account created, please log-in'); return redirect('login')
     return render(request, 'notes_register.html')
 
 def login_user(request):

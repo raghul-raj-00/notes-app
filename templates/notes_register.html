@@ -1,5 +1,5 @@
 {% extends 'notes_base.html' %}
-{% block title %}Sign up | Notes{% endblock %}
+{% block title %}Sign up | Notes{% endblock %}
 
 {% block content %}
 <h3 class="mb-3">Create Account</h3>
@@ -18,11 +18,14 @@
         <label>Confirm Password</label><br>
         <input type="password" name="password2" required>
     </div>
-    <button class="btn btn-blue w-100">Register</button>
 
-    {% if error %}
-        <p style="color:red" class="mt-2">{{ error }}</p>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red" class="mt-2">{{ message }}</p>
+        {% endfor %}
     {% endif %}
+
+    <button class="btn btn-blue w-100">Register</button>
 </form>
 
 <p class="mt-2">
