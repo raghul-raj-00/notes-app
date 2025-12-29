@@ -1,4 +1,4 @@
-A simple and secure Django-based Notes Application that allows users to register, log in, and create, view, update, and delete personal notes. Each user's data is private and protected through authentication.
+A simple and secure Django-based Notes Application that allows users to register, log in, and create, view, update, delete personal notes and summarizing the notes. Each user's data is private and protected through authentication.
 
 🚀 Features
 ✅ User Registration & Login
