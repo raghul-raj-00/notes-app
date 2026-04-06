@@ -17,5 +17,5 @@ def summarize_text(text):
 
         return response.choices[0].message.content
 
-    except Exception as e:
-        return f"Mistral API Error: {e}"
+    except Exception as er:
+        return f"Mistral API Error: {er}"
