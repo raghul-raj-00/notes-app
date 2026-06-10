@@ -8,7 +8,7 @@ def summarize_text(text):
         response = client.chat.complete(
             model="mistral-small-latest",
             messages=[
-                {"role": "system", "content": "Summarize the user's note in 3–4 bullet points."},
+                {"role": "system", "content": "Summarize the user's note in  2-3 lines."},
                 {"role": "user", "content": text},
             ],
             max_tokens=200,

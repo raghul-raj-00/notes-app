@@ -2,34 +2,50 @@
 {% load static %}
 
 {% block title %}Your Notes{% endblock %}
-    
-{% block content %}
-<h2 class="mb-3">Your Notes {{ request.user.username }}</h2>
 
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <h2 class="text-3xl font-bold text-slate-800">Your Notes, <span class="text-white">{{ request.user.username }}</span></h2>
+    <a href="{% url 'create_note' %}" class="btn-press bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+        <span class="text-lg">+</span> New Note
+    </a>
+</div>
 
 {% if notes %}
-    {% for n in notes %}
-        <div class="note-card">
-            
-            <h3>{{ n.title }}</h3>
-            <p>{{ n.content }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for n in notes %}
+            <div class="note-card-hover bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 flex flex-col justify-between h-full">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3 line-clamp-2">{{ n.title }}</h3>
+                    <p class="text-slate-600 leading-relaxed mb-4 line-clamp-4">{{ n.content }}</p>
 
-            {% if n.summary %}
-                
-                    <strong>AI Summary:</strong>
-                    <p>{{ n.summary|linebreaks }}</p>
-                    
-            {% endif %}
+                    {% if n.summary %}
+                        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-500">AI Summary</span>
+                                <span class="text-indigo-300">✦</span>
+                            </div>
+                            <p class="text-sm text-indigo-900 italic leading-relaxed">{{ n.summary|linebreaks }}</p>
+                        </div>
+                    {% endif %}
+                </div>
 
-            <div style="margin-top:12px;">
-                <a href="{% url 'edit_note' n.id %}" class="btn btn-grey">Edit</a>
-                <a href="{% url 'delete_note' n.id %}" class="btn btn-red">Delete</a>
-                <a href="{% url 'summarize_note' n.id %}" class="btn btn-blue">Summarize</a>
+                <div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-slate-100">
+                    <a href="{% url 'edit_note' n.id %}" class="btn-press btn btn-grey flex-1 text-center text-xs font-medium py-2 px-3 rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">Edit</a>
+                    <a href="{% url 'summarize_note' n.id %}" class="btn-press btn btn-blue flex-1 text-center text-xs font-medium py-2 px-3 rounded-md bg-indigo-100 text-black hover:bg-indigo-200 transition-colors">Summarize</a>
+                    <a href="{% url 'delete_note' n.id %}" class="btn-press btn btn-red flex-1 text-center text-xs font-medium py-2 px-3 rounded-md bg-red-50 text-white hover:bg-red-100 transition-colors">Delete</a>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% else %}
-    <p>No notes yet. Click <strong>New Note</strong> to create one.</p>
+    <div class="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+        <div class="text-5xl mb-4">✍️</div>
+        <p class="text-slate-500 text-lg">No notes yet. Start capturing your thoughts!</p>
+        <a href="{% url 'create_note' %}" class="inline-block mt-6 btn-press bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-all shadow-md">
+            Create Your First Note
+        </a>
+    </div>
 {% endif %}
 
 {% endblock %}

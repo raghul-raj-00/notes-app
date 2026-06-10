@@ -8,9 +8,9 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_DB: dbname
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: notesdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
