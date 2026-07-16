@@ -1,145 +1,520 @@
+/* =========================================================================
+   FIELD NOTES — a card-catalogue / archivist's notebook design system
+   Built for the same markup & class names as the original stylesheet.
+   No HTML/JS logic touched — presentation only.
+   ========================================================================= */
 
- body {
-     
-    
-    margin: 0;
-    padding: 0;
-    font-family: "Inter", sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-    background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 40%, #1f1f78 100%);
-    background-attachment: fixed;
-    box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
-    color: white;
-    
+:root {
+    /* -- ink & paper -- */
+    --ink-900: #1b2a41;   /* deep archive-navy: topbar, headings, primary buttons  */
+    --ink-700: #2e4057;   /* secondary navy: running text on paper                */
+    --ink-500: #5b6b82;   /* muted navy: captions, placeholders                   */
+    --canvas:  #ece7d8;   /* room background — the desk the cards sit on          */
+    --paper:   #f6f2e6;   /* index-card stock                                     */
+    --paper-2: #eee6cf;   /* deeper card stock / hovered surfaces                 */
+    --line:    #d9cfae;   /* hairline rules & card edges                          */
+
+    /* -- stamped inks -- */
+    --rust:      #a23b30; /* oxblood stamp ink — delete / errors / primary accent */
+    --rust-dark: #832d24;
+    --moss:      #3f6350; /* library-green ink — success / AI                     */
+    --moss-dark: #2f4c3d;
+    --gold:      #b9862c; /* mustard ink — focus rings, links, highlight          */
+
+    --radius-card: 3px;
+    --radius-pill: 999px;
+    --shadow-card: 0 1px 0 rgba(27,42,65,0.05), 0 8px 16px -10px rgba(27,42,65,0.35);
+    --shadow-lift: 0 1px 0 rgba(27,42,65,0.06), 0 16px 28px -14px rgba(27,42,65,0.45);
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
 
-a { color: inherit; }
+* { box-sizing: border-box; }
 
-/* navbar*/
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    color: var(--ink-700);
+    min-height: 100vh;
+    background-color: var(--canvas);
+    /* faint ledger-line texture on the desk */
+    background-image:
+        repeating-linear-gradient(180deg, rgba(27,42,65,0.035) 0px, rgba(27,42,65,0.035) 1px, transparent 1px, transparent 28px);
+    background-attachment: fixed;
+}
+
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--gold); color: var(--paper); }
+
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   Topbar — the ledger header
+   --------------------------------------------------------------------- */
 .topbar {
     width: 100%;
-    background: rgba(224, 170, 22, 0.5);
-    backdrop-filter: blur(14px);
-    padding: 12px 24px;
-    color: #fff;
+    background: var(--ink-900);
+    padding: 16px 28px;
+    color: #efe7d1;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 0 var(--gold);
+    position: relative;
+}
 
-    box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+.topbar h1 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #f4ecd6;
+    margin: 0;
 }
 
 .topbar nav a {
-    background: hsla(33, 75%, 50%, 0.161);
-    padding: 8px 16px;
-    border-radius: 6px;
-    margin-left: 10px;
+    background: transparent;
+    padding: 6px 4px;
+    margin-left: 22px;
     text-decoration: none;
-    transition: 0.25s ease;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #c7cedb;
+    border-bottom: 1px solid transparent;
 }
 
 .topbar nav a:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-3px);
+    color: var(--gold);
+    border-bottom-color: var(--gold);
 }
 
-
-/* wrapper*/
+/* ---------------------------------------------------------------------
+   Wrapper — the desk blotter the cards are laid on
+   --------------------------------------------------------------------- */
 .wrapper {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 30px 40px;
-
-    background: rgba(255,255,255,0.08);
-    border-radius: 20px;
-    backdrop-filter: blur(14px);
-
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    max-width: 920px;
+    margin: 44px auto;
+    padding: 36px 44px 44px;
+    background: var(--paper);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--line);
+    position: relative;
 }
 
+.wrapper::before {
+    /* a stitched thread along the top, like a bound notebook edge */
+    content: "";
+    position: absolute;
+    top: 0; left: 32px; right: 32px;
+    height: 1px;
+    background-image: repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 12px);
+    opacity: 0.6;
+}
 
-/* Headings */
-h2, h3 {
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+/* ---------------------------------------------------------------------
+   Headings
+   --------------------------------------------------------------------- */
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
     font-weight: 600;
+    color: var(--ink-900);
+    margin-bottom: 1rem;
+    letter-spacing: 0.002em;
 }
 
+h1 { font-size: 2rem; font-weight: 700; }
 
+/* ---------------------------------------------------------------------
+   Note cards — index cards, faintly askew, with a punch hole
+   --------------------------------------------------------------------- */
 .note-card {
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 20px;
-    border-radius: 14px;
-    margin-bottom: 20px;
+    background: var(--paper);
+    background-image: linear-gradient(var(--paper), var(--paper)),
+        repeating-linear-gradient(180deg, transparent 0 27px, var(--line) 27px 28px);
+    background-blend-mode: normal;
+    border: 1px solid var(--line);
+    padding: 22px 22px 18px 30px;
+    border-radius: var(--radius-card);
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    transform: rotate(-0.35deg);
+}
 
-    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
-    transition: 0.25s ease;
+.note-card:nth-child(3n)  { transform: rotate(0.4deg); }
+.note-card:nth-child(3n+1){ transform: rotate(-0.4deg); }
+.note-card:nth-child(3n+2){ transform: rotate(0.2deg); }
+
+.note-card::before {
+    /* punch hole, top-left, like a card-catalogue card */
+    content: "";
+    position: absolute;
+    top: 16px; left: 12px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--canvas);
+    box-shadow: inset 0 1px 2px rgba(27,42,65,0.35);
 }
 
 .note-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+    transform: translateY(-3px) rotate(0deg);
+    box-shadow: var(--shadow-lift);
+    border-color: #c9bd90;
 }
 
-
-
+/* ---------------------------------------------------------------------
+   Buttons
+   --------------------------------------------------------------------- */
 .btn {
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
     text-decoration: none;
-    color: white;
-    font-size: 14px;
-    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
     cursor: pointer;
     display: inline-block;
-    transition: 0.25s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .btn-blue {
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    background: var(--ink-900);
+    color: #f4ecd6;
+    border-color: var(--ink-900);
 }
+.btn-blue:hover { background: #142033; box-shadow: 0 4px 10px -4px rgba(27,42,65,0.6); }
 
 .btn-red {
-    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    background: var(--rust);
+    color: #fbeee9;
+    border-color: var(--rust);
 }
+.btn-red:hover { background: var(--rust-dark); box-shadow: 0 4px 10px -4px rgba(162,59,48,0.55); }
 
 .btn-grey {
-    background: rgba(255,255,255,0.25);
+    background: transparent;
+    color: var(--ink-700);
+    border-color: var(--line);
 }
+.btn-grey:hover { background: var(--paper-2); color: var(--ink-900); border-color: #c9bd90; }
 
-.btn:hover {
-    transform: scale(1.07);
-    opacity: 0.9;
-}
+.btn:hover { transform: translateY(-1px); }
 
-
-
-input, textarea {
+/* ---------------------------------------------------------------------
+   Form inputs — catalogue-entry fields
+   --------------------------------------------------------------------- */
+input, textarea, .form-control {
     width: 100%;
-    padding: 12px;
+    padding: 11px 14px;
     margin-top: 8px;
-
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 10px;
-    color: white;
-
-    font-size: 15px;
-    backdrop-filter: blur(10px);
+    background: #fffdf7;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
 }
 
-input::placeholder,
-textarea::placeholder {
-    color: rgba(255,255,255,0.7);
+input:focus, textarea:focus, .form-control:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(185, 134, 44, 0.18);
 }
 
-textarea {
-    resize: vertical;
+input::placeholder, textarea::placeholder { color: #a19a80; }
+
+label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+    display: block;
+    margin-top: 18px;
 }
 
+textarea { resize: vertical; min-height: 120px; }
 
+/* ---------------------------------------------------------------------
+   Notes grid
+   --------------------------------------------------------------------- */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+    margin-top: 26px;
+}
 
-* {
-    transition: 0.2s ease;
+/* ---------------------------------------------------------------------
+   Empty state
+   --------------------------------------------------------------------- */
+.empty-state {
+    text-align: center;
+    padding: 64px 20px;
+    background: repeating-linear-gradient(135deg, transparent 0 10px, rgba(27,42,65,0.03) 10px 11px);
+    border-radius: var(--radius-card);
+    border: 1px dashed var(--line);
+}
+
+.empty-state p {
+    color: var(--ink-500);
+    margin-bottom: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------------
+   Auth forms — the catalogue entry card
+   --------------------------------------------------------------------- */
+.form-container {
+    max-width: 400px;
+    margin: 10px auto 0;
+}
+
+.form-container input { margin-bottom: 4px; }
+
+.form-container button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 22px;
+    color: var(--ink-500);
+    font-size: 0.85rem;
+}
+
+.form-footer a {
+    color: var(--gold);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(185,134,44,0.4);
+}
+.form-footer a:hover { border-bottom-color: var(--gold); }
+
+.form-subtitle {
+    color: var(--ink-500);
+    margin-top: -6px;
+    margin-bottom: 26px;
+    font-size: 0.92rem;
+    font-family: var(--font-mono);
+}
+
+.form-container h1 { margin-bottom: 4px; }
+
+/* ---------------------------------------------------------------------
+   Form actions
+   --------------------------------------------------------------------- */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.form-actions .btn {
+    flex: 1;
+    text-align: center;
+    padding: 14px 24px;
+}
+
+/* ---------------------------------------------------------------------
+   Misc small elements
+   --------------------------------------------------------------------- */
+.delete-icon {
+    font-size: 2.75rem;
+    text-align: center;
+    margin-bottom: 16px;
+    filter: sepia(0.3) saturate(1.4) hue-rotate(-10deg);
+}
+
+.messages { margin-bottom: 18px; }
+
+.messages p {
+    padding: 12px 16px;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    border-left: 3px solid transparent;
+}
+
+.messages .error {
+    background: #fbeee9;
+    color: var(--rust-dark);
+    border: 1px solid #ecd0c8;
+    border-left: 3px solid var(--rust);
+}
+
+.messages .success {
+    background: #eaf1ec;
+    color: var(--moss-dark);
+    border: 1px solid #cfe0d3;
+    border-left: 3px solid var(--moss);
+}
+
+.note-card-hover:hover {
+    transform: translateY(-4px) rotate(0deg);
+    box-shadow: var(--shadow-lift);
+}
+
+/* ---------------------------------------------------------------------
+   Page header
+   --------------------------------------------------------------------- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.page-header h2 { margin: 0; }
+
+/* ---------------------------------------------------------------------
+   Note card internals
+   --------------------------------------------------------------------- */
+.note-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ink-900);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.note-content {
+    color: var(--ink-700);
+    line-height: 1.65;
+    margin-bottom: 16px;
+    font-size: 0.94rem;
+}
+
+/* ---------------------------------------------------------------------
+   AI summary — a hand-stamped annotation
+   --------------------------------------------------------------------- */
+.ai-summary {
+    background: #eef2ec;
+    border: 1px dashed #a9c2ac;
+    border-radius: 2px;
+    padding: 12px 16px 12px 14px;
+    margin-bottom: 16px;
+    position: relative;
+    transform: rotate(-0.6deg);
+}
+
+.summary-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--moss-dark);
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 1px 7px;
+    border: 1px solid var(--moss);
+    border-radius: var(--radius-pill);
+}
+
+.ai-summary p {
+    color: var(--moss-dark);
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    font-style: normal;
+    margin: 0;
+    line-height: 1.55;
+}
+
+/* Ask-AI panel on the notes list page */
+.rag-container {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    margin-bottom: 8px;
+}
+
+.rag-container h3 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+}
+
+.rag-container form {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    align-items: center;
+}
+
+.rag-container input { margin-top: 0; }
+
+.rag-container .btn { white-space: nowrap; }
+
+/* ---------------------------------------------------------------------
+   Note actions
+   --------------------------------------------------------------------- */
+.note-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 16px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--line);
+}
+
+.note-actions .btn {
+    flex: 1;
+    text-align: center;
+    padding: 9px 10px;
+    font-size: 0.68rem;
+}
+
+/* ---------------------------------------------------------------------
+   Empty icon
+   --------------------------------------------------------------------- */
+.empty-icon { font-size: 2.75rem; margin-bottom: 16px; }
+
+/* ---------------------------------------------------------------------
+   Press feedback
+   --------------------------------------------------------------------- */
+.btn-press:active { transform: scale(0.97); }
+
+/* ---------------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------------- */
+@media (max-width: 720px) {
+    .topbar { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .topbar nav a { margin-left: 0; margin-right: 18px; }
+    .wrapper { margin: 20px 14px; padding: 26px 20px 32px; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .form-actions { flex-direction: column; }
+    .rag-container form { flex-direction: column; align-items: stretch; }
 }

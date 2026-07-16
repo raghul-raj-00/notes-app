@@ -1,53 +1,36 @@
 {% extends 'notes_base.html' %}
-{% block title %}Sign up | Notes{% endblock %}
+{% block title %}Sign Up | Notes{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto mt-12">
-    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-        <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold text-slate-800">Create Account</h3>
-            <p class="text-slate-500 mt-2">Join the Notes App and organize your thoughts.</p>
-        </div>
+<div class="form-container">
+    <h1>Create Account</h1>
+    <p class="form-subtitle">Join the Notes App and organize your thoughts.</p>
 
-        <form method="POST" class="space-y-5">
-            {% csrf_token %}
-            <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700 ml-1">Username</label>
-                <input name="username" required
-                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder:text-slate-400"
-                       placeholder="johndoe">
-            </div>
+    <form method="POST">
+        {% csrf_token %}
 
-            <<div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700 ml-1">Password</label>
-                <input type="password" name="password1" required
-                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder:text-slate-400"
-                       placeholder="••••••••">
-            </div>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Choose a username" required>
 
-            <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700 ml-1">Confirm Password</label>
-                <input type="password" name="password2" required
-                       class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder:text-slate-400"
-                       placeholder="••••••••">
-            </div>
+        <label for="password1">Password</label>
+        <input type="password" name="password1" id="password1" placeholder="Create a password" required>
 
-            {% if messages %}
+        <label for="password2">Confirm Password</label>
+        <input type="password" name="password2" id="password2" placeholder="Confirm your password" required>
+
+        {% if messages %}
+            <div class="messages">
                 {% for message in messages %}
-                    <p class="text-sm text-red-500 bg-red-50 p-3 rounded-lg border border-red-100">{{ message }}</p>
+                    <p class="error">{{ message }}</p>
                 {% endfor %}
-            {% endif %}
+            </div>
+        {% endif %}
 
-            <button class="btn-press btn btn-blue w-full bg-indigo-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-md hover:shadow-indigo-200">
-                Register Account
-            </button>
-        </form>
+        <button type="submit" class="btn btn-blue" style="width: 100%;">Create Account</button>
+    </form>
 
-        <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-            <p class="text-slate-600">
-                Have an account? <a href="{% url 'login' %}" class="text-indigo-600 font-semibold hover:underline transition-all">Login here</a>
-            </p>
-        </div>
+    <div class="form-footer">
+        <p>Have an account? <a href="{% url 'login' %}">Login here</a></p>
     </div>
 </div>
 {% endblock %}

@@ -2,31 +2,33 @@
 {% block title %}Login | Notes{% endblock %}
 
 {% block content %}
-<h1 class="mb-3"> Notes App<h1>
-<h3 class="mb-3">Login</h3>
-
-<form method="POST">
-    {% csrf_token %}
-    <div class="mb-2">
-        <label>Username</label><br>
-        <input name="username" required>
-    </div>
-    <div class="mb-3">
-        <label>Password</label><br>
-        <input type="password" name="password" required>
-    </div>
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color:red" class="mt-2">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-    <button class="btn btn-blue w-100">Login</button>
-
+<div class="form-container">
     
-</form>
+    <h1>Welcome Back</h1>
+    <p class="form-subtitle">Sign in to continue to your notes</p>
 
-<p class="mt-2">
-    No account? <a href="{% url 'signup' %}">Sign up</a>
-</p>
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required placeholder="Enter your username">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required placeholder="Enter your password">
+
+        <button type="submit" class="btn btn-blue">Sign In</button>
+    </form>
+
+    <div class="form-footer">
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+</div>
 {% endblock %}
-

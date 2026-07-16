@@ -30,3 +30,10 @@ account/
 travelweb/
 firstdjango/settings.py
 .history/
+templates/base.html
+templates/index.html
+templates/home.html
+templates/register.html
+templates/result.html
+#environment file
+.env/ 

@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('accounts/login/', views.login_user),
     path("<int:pk>/summarize/", views.summarize_note, name="summarize_note"),
+    path("ask/", views.ask_ai, name="ask_ai"),
 
 ]
 

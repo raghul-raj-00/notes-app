@@ -8,6 +8,10 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .serializers import NoteSerializer
 from .utils.ai import summarize_text
+from .utils.rag_service import index_note,ask_question
+from .utils.vectorstore import delete_note_vectors
+from .utils.rag_service import index_note, ask_question
+from django.http import JsonResponse
 # ---------- auth ----------
 def signup(request):
     if request.method == 'POST':
@@ -42,9 +46,11 @@ def note_list(request):
 @login_required
 def create_note(request):
     if request.method == 'POST':
-        Note.objects.create(user=request.user,
+        note=Note.objects.create(user=request.user,
                             title=request.POST['title'],
                             content=request.POST['content'])
+        index_note(note,is_update=False)  # Index the note after creation
+        
         return redirect('note_list')
     return render(request, 'note_form.html', {'note': None})
 
@@ -53,14 +59,18 @@ def edit_note(request, pk):
     note = get_object_or_404(Note, id=pk, user=request.user)
     if request.method == 'POST':
         note.title, note.content = request.POST['title'], request.POST['content']
-        note.save(); return redirect('note_list')
+        note.save()
+        index_note(note,is_update=True)  # Re-index the note after editing
+        return redirect('note_list')
     return render(request, 'note_form.html', {'note': note})
 
 @login_required
 def delete_note(request, pk):
     note = get_object_or_404(Note, id=pk, user=request.user)
     if request.method == 'POST':
-        note.delete(); return redirect('note_list')
+        delete_note_vectors(note.user.id,note.id)  # Delete the note's vectors from Pinecone
+        note.delete()
+        return redirect('note_list')
     return render(request, 'confirm_delete.html', {'note': note})
 @login_required
 def summarize_note(request, pk):
@@ -70,7 +80,16 @@ def summarize_note(request, pk):
     note.save()
     return redirect('note_list')
 
-
+@login_required
+def ask_ai(request):
+    if(request.method=='POST'):
+        question=request.POST.get('question')
+        answer=ask_question(question,request.user.id)
+        return render(request,'note_list.html',{'answer':answer, 'question':question,'notes': Note.objects.filter(user=request.user)})
+    return render(request,'note_list.html',{'notes': Note.objects.filter(user=request.user)})
+    
+        #we ve to return this ans to template that means frontend
+        
 
 # ---------- API ----------
 class NoteViewSet(viewsets.ModelViewSet):
@@ -82,4 +101,7 @@ class NoteViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        note=serializer.save(user=self.request.user)
+        index_note(note)  # Index the note after creation
+        
+#to ask question chatgpt that note.id is not accessed in other fn in file
