@@ -36,4 +36,4 @@ templates/home.html
 templates/register.html
 templates/result.html
 #environment file
-.env/ 
+.env
