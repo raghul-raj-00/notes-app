@@ -29,7 +29,9 @@ def login_user(request):
     if request.method == 'POST':
         user = authenticate(request, username=request.POST['username'],
                             password=request.POST['password'])
-        if user: login(request, user); return redirect('note_list')
+        if user: 
+            login(request, user)
+            return redirect('note_list')
         messages.error(request, 'Invalid credentials')
     return render(request, 'login.html')
 

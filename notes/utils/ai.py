@@ -1,13 +1,13 @@
 from django.conf import settings
-from mistralai import Mistral
+from groq import Groq
 
-client=Mistral(api_key=settings.MISTRAL_API_KEY)
+client = Groq(api_key=settings.GROQ_API_KEY)
 
 
 def summarize_text(text):
     try:
-        response = client.chat.complete(
-            model="mistral-small-latest",
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "Summarize the user's note in  2-3 lines."},
                 {"role": "user", "content": text},
@@ -19,25 +19,27 @@ def summarize_text(text):
         return response.choices[0].message.content
 
     except Exception as er:
-        return f"Mistral API Error: {er}"
-    
-def generate_answer(question,context):
+        return f"Groq API Error: {er}"
 
-    prompt = f"""Answer only from the provided context. 
-    Context:
-    {context}
-    Question:
-    {question}
-    """
+def generate_answer(question, context):
+    try:
+        prompt = f"""Answer only from the provided context.
+        Context:
+        {context}
+        Question:
+        {question}
+        """
 
-    response = client.chat.complete(
-        model="mistral-small-latest",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
 
-    return response.choices[0].message.content
+        return response.choices[0].message.content
+    except Exception as er:
+        return f"Groq API Error: {er}"

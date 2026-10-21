@@ -51,9 +51,10 @@
     <div class="notes-grid">
         {% for n in notes %}
             <div class="note-card note-card-hover">
+                <p><span class="note-date">{{ n.created_at|date:"M d, Y" }}</span>
                 <h3 class="note-title">{{ n.title }}</h3>
                 <p class="note-content">{{ n.content }}</p>
-
+                
                 {% if n.summary %}
                     <div class="ai-summary">
                         <span class="summary-label">AI Summary</span>
