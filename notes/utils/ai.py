@@ -7,7 +7,7 @@ client = Groq(api_key=settings.GROQ_API_KEY)
 def summarize_text(text):
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
             messages=[
                 {"role": "system", "content": "Summarize the user's note in  2-3 lines."},
                 {"role": "user", "content": text},
@@ -31,7 +31,7 @@ def generate_answer(question, context):
         """
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="mixtral-8x7b-32768",
             messages=[
                 {
                     "role": "user",
